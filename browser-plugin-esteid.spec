@@ -4,7 +4,7 @@
 Summary:	Estonian ID card digital signing browser plugin
 Name:		browser-plugin-esteid
 Version:	1.2.0
-Release:	0.1
+Release:	0.2
 License:	LGPL v2+
 Group:		Applications/Networking
 URL:		http://code.google.com/p/esteid/
@@ -62,20 +62,18 @@ export CFLAGS="$CXXFLAGS"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd build
-%{__make} install \
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
-cd ..
-
-%find_lang esteid-browser-plugin
 
 install -d $RPM_BUILD_ROOT%{_libdir}/browser-plugins
 mv $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins/npesteid.so $RPM_BUILD_ROOT%{_libdir}/browser-plugins
 
 # Install Gecko extension
-install -d $RPM_BUILD_ROOT%{_libdir}/firefox/extensions/%{extension_id}
-unzip build/esteid-*.xpi \
-      -d $RPM_BUILD_ROOT%{_libdir}/firefox/extensions/%{extension_id}
+install -d $RPM_BUILD_ROOT%{_libdir}/mozilla/extensions/%{extension_id}
+cp -a build/projects/esteid-browser-plugin-1/Mozilla/xpi/* \
+      $RPM_BUILD_ROOT%{_libdir}/mozilla/extensions/%{extension_id}
+
+%find_lang esteid-browser-plugin
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -85,4 +83,4 @@ rm -rf $RPM_BUILD_ROOT
 %doc projects/esteid-browser-plugin-%{version}/AUTHORS
 %attr(755,root,root) %{_libdir}/browser-plugins/npesteid.so
 %{_datadir}/esteid-browser-plugin
-%{_libdir}/firefox/extensions/%{extension_id}
+%{_libdir}/mozilla/extensions/%{extension_id}
