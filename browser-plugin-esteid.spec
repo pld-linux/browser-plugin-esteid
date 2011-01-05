@@ -1,15 +1,15 @@
 # TODO
 # - new dir for gecko extensions
-%define		firebreath_version 1.3.0
+%define		firebreath_version 1.3.2a
 Summary:	Estonian ID card digital signing browser plugin
 Name:		browser-plugin-esteid
 Version:	1.2.0
-Release:	0.2
+Release:	0.4
 License:	LGPL v2+
 Group:		Applications/Networking
 URL:		http://code.google.com/p/esteid/
-Source0:	http://firebreath.googlecode.com/files/firebreath-%{firebreath_version}.tar.bz2
-# Source0-md5:	704bd0183407a166d105277b13763d01
+Source0:	http://firebreath.googlecode.com/files/firebreath-%{firebreath_version}.7z
+# Source0-md5:	15d7bfefe21b916563b0583f4ecae675
 Source1:	http://esteid.googlecode.com/files/esteid-browser-plugin-%{version}.tar.bz2
 # Source1-md5:	4a26435087b8578c5727b144e5870ae6
 BuildRequires:	boost-devel
@@ -17,11 +17,13 @@ BuildRequires:	cmake
 BuildRequires:	gtkmm-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	openssl-devel
+BuildRequires:	p7zip
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.577
 BuildRequires:	smartcardpp-devel
 BuildRequires:	unzip
 BuildRequires:	zip
+Requires:	browser-plugins >= 2.0
 # obsolete package name upstream uses
 Obsoletes:	esteid-browser-plugin
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -40,8 +42,10 @@ implements a compatibility mode to support existing web pages that use
 old signature API-s.
 
 %prep
+%setup -qcT
 # Extract firebreath
-%setup -q -n firebreath-%{firebreath_version}
+7z x %{SOURCE0} -bd >/dev/null
+mv firebreath-%{firebreath_version}/* .
 # Extract esteid-browser-plugin into firebreath's projects/ subdir
 install -d projects
 tar -xf %{SOURCE1} -C projects
@@ -77,6 +81,14 @@ cp -a build/projects/esteid-browser-plugin-1/Mozilla/xpi/* \
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+%update_browser_plugins
+
+%postun
+if [ "$1" = 0 ]; then
+	%update_browser_plugins
+fi
 
 %files -f esteid-browser-plugin.lang
 %defattr(644,root,root,755)
