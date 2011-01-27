@@ -14,6 +14,7 @@ Source1:	http://esteid.googlecode.com/files/esteid-browser-plugin-%{version}.tar
 # Source1-md5:	4a26435087b8578c5727b144e5870ae6
 BuildRequires:	boost-devel
 BuildRequires:	cmake
+BuildRequires:	gettext-devel
 BuildRequires:	gtkmm-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	openssl-devel
