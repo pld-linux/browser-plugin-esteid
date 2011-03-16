@@ -4,7 +4,7 @@
 Summary:	Estonian ID card digital signing browser plugin
 Name:		browser-plugin-esteid
 Version:	1.2.0
-Release:	0.4
+Release:	1
 License:	LGPL v2+
 Group:		Applications/Networking
 URL:		http://code.google.com/p/esteid/
@@ -45,7 +45,7 @@ old signature API-s.
 %prep
 %setup -qcT
 # Extract firebreath
-7z x %{SOURCE0} -bd >/dev/null
+7z x %{SOURCE0} >/dev/null
 mv firebreath-%{firebreath_version}/* .
 # Extract esteid-browser-plugin into firebreath's projects/ subdir
 install -d projects
