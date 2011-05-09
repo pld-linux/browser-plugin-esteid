@@ -1,17 +1,21 @@
 # TODO
 # - new dir for gecko extensions
+# - current firebreath version is 1.5.1
 %define		firebreath_version 1.3.2a
 Summary:	Estonian ID card digital signing browser plugin
+Summary(pl.UTF-8):	Wtyczka przeglądarki do cyfrowego podpisywania przy użyciu estońskich kart eID
 Name:		browser-plugin-esteid
 Version:	1.2.0
 Release:	1
 License:	LGPL v2+
 Group:		Applications/Networking
-URL:		http://code.google.com/p/esteid/
+#Source0Download: http://code.google.com/p/firebreath/downloads/list
 Source0:	http://firebreath.googlecode.com/files/firebreath-%{firebreath_version}.7z
 # Source0-md5:	15d7bfefe21b916563b0583f4ecae675
+#Source1Download: http://code.google.com/p/esteid/downloads/list
 Source1:	http://esteid.googlecode.com/files/esteid-browser-plugin-%{version}.tar.bz2
 # Source1-md5:	4a26435087b8578c5727b144e5870ae6
+URL:		http://code.google.com/p/esteid/
 BuildRequires:	boost-devel
 BuildRequires:	cmake
 BuildRequires:	gettext-devel
@@ -40,7 +44,18 @@ The plugin is used by web pages to obtain users digital signature. To
 protect privacy, only web pages in "whitelist" can use the card. For
 unlisted pages, a yellow notification bar appears. The plugin also
 implements a compatibility mode to support existing web pages that use
-old signature API-s.
+old signature APIs.
+
+%description -l pl.UTF-8
+Esteid Browser Plugin to wtyczka dla wielu przeglądarek udostępniająca
+funkcje estońskich kart eID z poziomu JavaScriptu.
+
+Wtyczka może być używana na stronach WWW w celu przesłania podpisu
+elektronicznego użytkownika. Aby chronić prywatność, podpisu mogą
+używać tylko strony z "białej listy". W przypadku stron nie
+znajdujących się na liście pojawia się żółty pasek powiadomienia.
+Wtyczka ma zaimplementowany także tryb kompatybilności obsługujący
+istniejące strony WWW używające stare API do podpisów.
 
 %prep
 %setup -qcT
@@ -54,7 +69,7 @@ tar -xf %{SOURCE1} -C projects
 %build
 install -d build
 cd build
-export CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing"
+export CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing -DBOOST_FILESYSTEM_VERSION=2"
 export CFLAGS="$CXXFLAGS"
 %cmake .. \
 	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE \
