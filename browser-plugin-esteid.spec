@@ -6,7 +6,7 @@ Summary:	Estonian ID card digital signing browser plugin
 Summary(pl.UTF-8):	Wtyczka przeglądarki do cyfrowego podpisywania przy użyciu estońskich kart eID
 Name:		browser-plugin-esteid
 Version:	1.2.0
-Release:	2
+Release:	3
 License:	LGPL v2+
 Group:		Applications/Networking
 #Source0Download: http://code.google.com/p/firebreath/downloads/list
