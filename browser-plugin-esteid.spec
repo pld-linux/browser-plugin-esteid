@@ -1,11 +1,16 @@
+#
+# Conditional build:
+%bcond_without	tests		# build without tests
+
 # TODO
-# - new dir for gecko extensions
+# - new dir for gecko extensions in browser-plugins or filesystem package
+
 %define		firebreath_version 1.5.2
 Summary:	Estonian ID card digital signing browser plugin
 Summary(pl.UTF-8):	Wtyczka przeglądarki do cyfrowego podpisywania przy użyciu estońskich kart eID
 Name:		browser-plugin-esteid
 Version:	1.3.3
-Release:	0.1
+Release:	1
 # The source files from esteid-browser-plugin and Firebreath are compiled
 # together to the shared object npesteid.so.
 # Firebreath is dual-licensed [BSD or LGPLv2+], esteid-browser-plugin is LGPLv2+.
@@ -86,9 +91,7 @@ cd build
 export CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing"
 export CFLAGS="$CXXFLAGS"
 %cmake .. \
-	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE \
-	-DCMAKE_SKIP_RPATH=TRUE \
-	-DDOCDIR=%{_docdir} \
+	-DVERBOSE:BOOL=YES \
 	-DWITH_SYSTEM_BOOST:BOOL=YES
 
 %{__make}
@@ -104,7 +107,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/mozilla/plugins/npesteid.so $RPM_BUILD_ROOT%{_libdi
 
 # Install Gecko extension
 install -d $RPM_BUILD_ROOT%{_libdir}/mozilla/extensions/%{extension_id}
-cp -a build/projects/esteid-browser-plugin-1/Mozilla/xpi/* \
+cp -a build/projects/esteid/Mozilla/xpi/* \
       $RPM_BUILD_ROOT%{_libdir}/mozilla/extensions/%{extension_id}
 
 %find_lang esteid-browser-plugin
@@ -123,6 +126,7 @@ fi
 %files -f esteid-browser-plugin.lang
 %defattr(644,root,root,755)
 %doc projects/esteid-browser-plugin-%{version}/AUTHORS
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/esteid-browser-plugin.conf
 %attr(755,root,root) %{_libdir}/browser-plugins/npesteid.so
 %{_datadir}/esteid-browser-plugin
 %{_libdir}/mozilla/extensions/%{extension_id}
