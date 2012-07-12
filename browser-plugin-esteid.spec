@@ -21,6 +21,7 @@ Source0:	http://firebreath.googlecode.com/files/firebreath-%{firebreath_version}
 # Source1Download: http://code.google.com/p/esteid/downloads/list
 Source1:	http://esteid.googlecode.com/files/esteid-browser-plugin-%{version}.tar.bz2
 # Source1-md5:	d9af514fb8fa251e9039340f7063eb12
+Patch0:		boost-1.50.patch
 URL:		http://code.google.com/p/esteid/
 BuildRequires:	boost-devel
 BuildRequires:	cmake
@@ -76,6 +77,8 @@ tar xf %{SOURCE1} -C projects
 # Remove bundled libraries
 %{__rm} -rv src/3rdParty/boost
 %{__rm} -rv src/libs
+
+%patch0 -p1
 
 %build
 install -d build

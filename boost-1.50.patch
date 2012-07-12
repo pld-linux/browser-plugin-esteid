@@ -1,0 +1,23 @@
+--- browser-plugin-esteid-1.3.3/projects/esteid-browser-plugin-1.3.3/PluginSettings.cpp.orig	2011-07-01 12:10:06.000000000 +0200
++++ browser-plugin-esteid-1.3.3/projects/esteid-browser-plugin-1.3.3/PluginSettings.cpp	2012-07-12 20:00:41.041515263 +0200
+@@ -23,10 +23,10 @@
+ #include <stdlib.h>
+ #endif
+ 
+-#define BOOST_FILESYSTEM_VERSION 2
+ #include <fstream>
+ #include <boost/filesystem/path.hpp>
+ #include <boost/filesystem/fstream.hpp>
++#include <boost/filesystem/operations.hpp>
+ #include <boost/foreach.hpp>
+ #include <boost/property_tree/ptree.hpp>
+ #include <boost/property_tree/xml_parser.hpp>
+@@ -62,7 +62,7 @@
+ #ifdef _WIN32
+     return path(getenv("APPDATA"), native);
+ #else // UNIX
+-    path home(getenv("HOME"), native);
++    path home(getenv("HOME"));
+ # ifdef __APPLE__
+     return home / "Library/Application Support";
+ # else
