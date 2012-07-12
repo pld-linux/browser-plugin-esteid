@@ -1,20 +1,26 @@
 # TODO
 # - new dir for gecko extensions
-# - current firebreath version is 1.5.1
-%define		firebreath_version 1.3.2a
+%define		firebreath_version 1.5.2
 Summary:	Estonian ID card digital signing browser plugin
 Summary(pl.UTF-8):	Wtyczka przeglądarki do cyfrowego podpisywania przy użyciu estońskich kart eID
 Name:		browser-plugin-esteid
-Version:	1.2.0
-Release:	3
+Version:	1.3.3
+Release:	0.1
+# The source files from esteid-browser-plugin and Firebreath are compiled
+# together to the shared object npesteid.so.
+# Firebreath is dual-licensed [BSD or LGPLv2+], esteid-browser-plugin is LGPLv2+.
+# The resulting npesteid.so binary is: LGPLv2+.
+#
+# The files in mozilla-esteid subpackage are all from esteid-browser-plugin
+# tarball and are LGPLv2+.
 License:	LGPL v2+
 Group:		Applications/Networking
 #Source0Download: http://code.google.com/p/firebreath/downloads/list
 Source0:	http://firebreath.googlecode.com/files/firebreath-%{firebreath_version}.7z
-# Source0-md5:	15d7bfefe21b916563b0583f4ecae675
-#Source1Download: http://code.google.com/p/esteid/downloads/list
+# Source0-md5:	7321e1c2157b69faf68e4b64aeb0ab3d
+# Source1Download: http://code.google.com/p/esteid/downloads/list
 Source1:	http://esteid.googlecode.com/files/esteid-browser-plugin-%{version}.tar.bz2
-# Source1-md5:	4a26435087b8578c5727b144e5870ae6
+# Source1-md5:	d9af514fb8fa251e9039340f7063eb12
 URL:		http://code.google.com/p/esteid/
 BuildRequires:	boost-devel
 BuildRequires:	cmake
@@ -60,16 +66,21 @@ istniejące strony WWW używające stare API do podpisów.
 %prep
 %setup -qcT
 # Extract firebreath
-7z x %{SOURCE0} >/dev/null
+7z x %{SOURCE0} > /dev/null
 mv firebreath-%{firebreath_version}/* .
+
 # Extract esteid-browser-plugin into firebreath's projects/ subdir
 install -d projects
-tar -xf %{SOURCE1} -C projects
+tar xf %{SOURCE1} -C projects
+
+# Remove bundled libraries
+%{__rm} -rv src/3rdParty/boost
+%{__rm} -rv src/libs
 
 %build
 install -d build
 cd build
-export CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing -DBOOST_FILESYSTEM_VERSION=2"
+export CXXFLAGS="%{rpmcxxflags} -fno-strict-aliasing"
 export CFLAGS="$CXXFLAGS"
 %cmake .. \
 	-DCMAKE_BUILD_WITH_INSTALL_RPATH=FALSE \
