@@ -30,7 +30,7 @@ Patch0:		boost-1.50.patch
 URL:		http://code.google.com/p/esteid/
 BuildRequires:	boost-devel
 BuildRequires:	cmake
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	gtkmm-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	openssl-devel
